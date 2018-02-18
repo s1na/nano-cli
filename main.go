@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/s1na/nano-cli/cmd"
+	"github.com/s1na/nanoc/cmd"
 )
 
 func main() {

@@ -8,8 +8,7 @@ import (
 )
 
 var (
-	addr   string
-	client *nano.Client
+	addr string
 )
 
 var rootCmd = &cobra.Command{

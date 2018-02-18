@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/s1na/nano-go"
+	"github.com/s1na/nano-go/rpc"
 	"github.com/spf13/cobra"
 )
 
@@ -18,13 +19,13 @@ var nodeVersionCmd = &cobra.Command{
 	Short: "Version info of a node instance",
 	Long:  `Version info of a node instance`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client := nano.NewClient(addr)
-		v, err := client.Version()
+		rpc.SetRPCServer(addr)
+		v, err := rpc.Version()
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("%v\n", v)
+		fmt.Printf("Node vendor: %s\nStore version: %s\nRPC Version: %s\n", v["node_vendor"], v["store_version"], v["rpc_version"])
 		return nil
 	},
 }
@@ -34,10 +35,14 @@ var nodeStopCmd = &cobra.Command{
 	Short: "Stop a node instance",
 	Long:  `Stop a node instance`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client := nano.NewClient(addr)
-		v, err := client.Stop()
+		rpc.SetRPCServer(addr)
+		r, err := rpc.Stop()
 		if err != nil {
 			return err
+		}
+
+		if r == false {
+			return errors.New("Stopping the node failed")
 		}
 
 		return nil
